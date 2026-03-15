@@ -11,8 +11,16 @@ export default function QuizPlay() {
   const [inQuiz, setInQuiz] = useState(false);
   const [quizDone, setQuizDone] = useState(false);
   const [score, setScore] = useState(0);
+  const [loggedin, setLoggedIn] = useState(false);
 
   useEffect(() => {
+    const user = localStorage.getItem('user');
+    if (!user) {
+      setLoggedIn(false);
+    } else {
+      setLoggedIn(true);
+    }
+
     const fetchQuizData = async () => {
       try {
         const response = await fetch(`/api/quiz/${id}`);
@@ -115,6 +123,13 @@ export default function QuizPlay() {
               <h1 className="text-2xl font-bold text-gray-900 mb-6">
                 Your Score: {score} / 5 pts
               </h1>
+              {!loggedin ? (<p className="text-gray-600 mb-8">
+                Log in to save your score and appear on the leaderboard!
+              </p>) : (
+                <p className="text-gray-600 mb-8">
+                Your score has been saved. Check out the leaderboard below!
+              </p>
+              )}
               <button onClick={() => navigate('/home')} className="w-full py-4 bg-yellow-500 text-white rounded-2xl font-bold hover:bg-yellow-600 transition-all cursor-pointer">
                 Home
               </button>
