@@ -7,7 +7,7 @@ An LLM-powered, full-stack quiz application that uses the Groq API to dynamicall
 * **Backend:** NestJS, TypeORM (PostgreSQL/MySQL)
 * **LLM:** Groq API (Llama-3.3-70b-versatile)
 
-## 🚀 Quick Start
+## Quick Start
 
 * Create a `.env` file in the root of the backend and add these:
   ```env
