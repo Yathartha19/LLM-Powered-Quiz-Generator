@@ -19,5 +19,3 @@ An LLM-powered, full-stack quiz application that uses the Groq API to dynamicall
   npm run build
   npm run dev
   ```
-
-```
