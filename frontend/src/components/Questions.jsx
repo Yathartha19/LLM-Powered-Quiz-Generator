@@ -12,7 +12,7 @@ const Questions = ( { quiz, onFinish } ) => {
 
   useEffect(() => {
     handleNext();
-  }, []);
+  });
 
   const handleNext = async  () => {
 
