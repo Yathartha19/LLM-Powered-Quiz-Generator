@@ -27,6 +27,7 @@ export default function QuizPlay() {
         if (!response.ok) {
             console.log("Failed to load quiz data:", response.statusText);
             throw new Error('Failed to load quiz data');
+            return;
         };
         const data = await response.json();
         setQuiz(data);
