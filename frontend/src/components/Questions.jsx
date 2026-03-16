@@ -16,15 +16,18 @@ const Questions = ( { quiz, onFinish } ) => {
 
   const handleNext = async  () => {
 
+    let currentScore = score
+
     if ( questions.length > 0 && selectedOption === questions[questions.length - 1].answer ) {
-      setScore(prev => prev + 1)
+      currentScore += 1
+      setScore(currentScore)
       setWasCorrect('true');
     } else {
       setWasCorrect('false');
     }
 
     if (questions.length === 5) {
-        onFinish(score);
+        onFinish(currentScore);
         return;
     }
 
@@ -37,12 +40,6 @@ const Questions = ( { quiz, onFinish } ) => {
           qns: questions,
           userid: localStorage.getItem('user')?.replace(/['"]+/g, '')
         })
-      });
-
-      console.log("Request payload:", {
-        quiz: quizData,
-        qns: questions,
-        userid: localStorage.getItem('user')?.replace(/['"]+/g, '')
       });
 
       const data = await response.json();
