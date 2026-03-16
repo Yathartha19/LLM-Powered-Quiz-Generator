@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 const Questions = ( { quiz, onFinish } ) => {
-  const navigate = useNavigate();  
   const quizData = quiz
   const [questions, setQuestions] = useState([])
   const [currentQn, setCurrentQn] = useState(null);
   const [score, setScore] = useState(0)
   const [qncounter, setQncounter] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [wasCorrect, setWasCorrect] = useState('none');
 
   useEffect(() => {
     handleNext();
@@ -19,6 +18,9 @@ const Questions = ( { quiz, onFinish } ) => {
 
     if ( questions.length > 0 && selectedOption === questions[questions.length - 1].answer ) {
       setScore(prev => prev + 1)
+      setWasCorrect('true');
+    } else {
+      setWasCorrect('false');
     }
 
     if (questions.length === 5) {
@@ -53,6 +55,8 @@ const Questions = ( { quiz, onFinish } ) => {
       setSelectedOption(null);
       setQncounter(data.length);
 
+      setWasCorrect('none');
+
     } catch (error) {
       console.error("Error fetching next question:", error);
       return;
@@ -83,7 +87,7 @@ const Questions = ( { quiz, onFinish } ) => {
               onClick={() => setSelectedOption(option)}
               className={`w-full p-4 rounded-2xl text-left border-2 transition-all duration-150 font-medium cursor-pointer ${
                 selectedOption === option 
-                ? 'border-yellow-500 bg-yellow-50 text-yellow-700' 
+                ? (wasCorrect === "true" ? 'border-green-500 bg-green-50 text-green-700' : wasCorrect === "false" ? 'border-red-500 bg-red-50 text-red-700' : wasCorrect === "none" ? 'border-yellow-300 bg-yellow-100 text-yellow-700' : '')
                 : 'border-gray-100 hover:border-gray-200 text-gray-600'
               }`}
             >
