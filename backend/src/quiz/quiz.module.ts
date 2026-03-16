@@ -5,10 +5,11 @@ import { AuthModule } from 'src/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Quiz } from './entities/quiz.entity';
 import { User } from 'src/auth/entities/user.entity';
+import { Attempt } from 'src/attempts/entities/attempt.entity';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([Quiz, User]), ConfigModule,],
+  imports: [ TypeOrmModule.forFeature([Quiz, User, Attempt]), ConfigModule,],
   controllers: [QuizController],
   providers: [QuizService],
 })

@@ -13,13 +13,14 @@ const quiz_controller_1 = require("./quiz.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const quiz_entity_1 = require("./entities/quiz.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
+const attempt_entity_1 = require("../attempts/entities/attempt.entity");
 const config_module_1 = require("@nestjs/config/dist/config.module");
 let QuizModule = class QuizModule {
 };
 exports.QuizModule = QuizModule;
 exports.QuizModule = QuizModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([quiz_entity_1.Quiz, user_entity_1.User]), config_module_1.ConfigModule,],
+        imports: [typeorm_1.TypeOrmModule.forFeature([quiz_entity_1.Quiz, user_entity_1.User, attempt_entity_1.Attempt]), config_module_1.ConfigModule,],
         controllers: [quiz_controller_1.QuizController],
         providers: [quiz_service_1.QuizService],
     })

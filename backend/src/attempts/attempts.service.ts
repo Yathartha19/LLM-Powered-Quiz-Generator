@@ -31,7 +31,7 @@ export class AttemptsService {
 
     const data = await this.quizRepository.findOne({ 
       where: { id: quizId }, 
-      relations: ['attempts'] 
+      relations: ['attempts', 'attempts.user'] 
     });
 
     return data;

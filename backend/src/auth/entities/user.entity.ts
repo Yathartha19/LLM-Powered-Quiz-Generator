@@ -14,7 +14,7 @@ export class User {
   email: string;
 
   @Column()
-  passwordHash: string; // Never store plain text!
+  passwordHash: string; 
 
   @OneToMany(() => Quiz, quiz => quiz.creator)
   quizzes: Quiz[];

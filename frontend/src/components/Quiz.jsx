@@ -62,7 +62,9 @@ export default function QuizPlay() {
       }
     };
 
-    await saveScore();
+    if (loggedin) {
+      await saveScore();
+    }
 
     setScore(score);
     setInQuiz(false); 

@@ -13,7 +13,7 @@ export class Quiz {
   @Column('text')
   description: string;
 
-  @ManyToOne(() => User, user => user.quizzes)
+  @ManyToOne(() => User, user => user.quizzes )
   creator: User;
 
   @OneToMany(() => Attempt, attempt => attempt.quiz)

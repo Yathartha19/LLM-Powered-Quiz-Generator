@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; 
 import { Quiz } from './entities/quiz.entity';
 import { User } from '../auth/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
+import { Attempt } from '../attempts/entities/attempt.entity';
 import Groq from 'groq-sdk';
 
 @Injectable()
@@ -16,6 +17,9 @@ export class QuizService {
 
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @InjectRepository(Attempt)
+    private attemptsRepository: Repository<Attempt>,
 
     private configService: ConfigService,
   ) {
@@ -42,6 +46,9 @@ export class QuizService {
   async delete(id: string, creatorId: string) {
     const quiz = await this.quizRepository.findOne({ where: { id } });
     if (!quiz) throw new Error('Quiz not found');
+
+    const attempts = await this.attemptsRepository.find({ where: { quiz: { id } } });
+    await this.attemptsRepository.remove(attempts);
 
     await this.quizRepository.remove(quiz);
     
