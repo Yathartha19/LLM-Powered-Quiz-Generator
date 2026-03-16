@@ -1,4 +1,4 @@
-# AI Infinite Quiz App
+# LLM Powered Quiz App
 
 An LLM-powered, full-stack quiz application that uses the Groq API to dynamically generate questions based on user-input topics. Questions are generated dynamically based on the quiz topic and the user's previous answers.
 
