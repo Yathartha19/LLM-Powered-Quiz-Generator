@@ -4,6 +4,7 @@ export declare class Question {
     question: string;
     options: string[];
     correctOption: string;
+    userAnswer: string;
     isCorrect: boolean;
     attempt: Attempt;
     startedAt: Date;

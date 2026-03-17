@@ -7,7 +7,7 @@ export class QuestionsController {
   
     @Post('create')
     create(@Body() body: Record<string, any>) {
-      return this.questionsService.create(body.question, body.options, body.correctOption, body.isCorrect, body.attemptId);
+      return this.questionsService.create(body.question, body.options, body.correctOption, body.userAnswer, body.isCorrect, body.attemptId);
     }
 
     @Post('get')

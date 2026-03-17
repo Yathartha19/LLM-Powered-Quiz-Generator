@@ -25,11 +25,11 @@ let QuestionsService = class QuestionsService {
         this.attemptsRepository = attemptsRepository;
         this.questionsRepository = questionsRepository;
     }
-    async create(questions, options, correctOption, isCorrect, attemptId) {
+    async create(questions, options, correctOption, userAnswer, isCorrect, attemptId) {
         const attempt = await this.attemptsRepository.findOne({ where: { id: attemptId } });
         if (!attempt)
             throw new Error('Attempt not found');
-        const newQuestion = this.questionsRepository.create({ question: questions, options, correctOption, isCorrect, attempt });
+        const newQuestion = this.questionsRepository.create({ question: questions, options, correctOption, userAnswer, isCorrect, attempt });
         await this.questionsRepository.save(newQuestion);
     }
     async findForAttempt(attemptId) {

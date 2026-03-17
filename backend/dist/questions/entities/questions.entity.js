@@ -17,6 +17,7 @@ let Question = class Question {
     question;
     options;
     correctOption;
+    userAnswer;
     isCorrect;
     attempt;
     startedAt;
@@ -38,6 +39,10 @@ __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Question.prototype, "correctOption", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", String)
+], Question.prototype, "userAnswer", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)

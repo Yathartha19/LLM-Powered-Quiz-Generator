@@ -16,6 +16,9 @@ export class Question {
   correctOption: string;
 
   @Column()
+  userAnswer: string;
+
+  @Column()
   isCorrect: boolean;
 
   @ManyToOne(() => Attempt, attempt => attempt.questions)

@@ -18,6 +18,11 @@ const Questions = ( { quiz, onFinish } ) => {
 
     let currentScore = score
 
+    if (selectedOption) {
+      questions[questions.length - 1].userAnswer = selectedOption;
+      console.log("Updated question with user answer:", questions[questions.length - 1], "Selected option:", selectedOption);
+    }
+
     if ( questions.length > 0 && selectedOption === questions[questions.length - 1].answer ) {
       currentScore += 1
       questions[questions.length - 1].isCorrect = true;

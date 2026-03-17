@@ -58,10 +58,9 @@ export default function QuizPlay() {
         });
 
         const data = await response.json();
-        console.log("Attempt saved with ID:", data);
 
         for (const question of questions) {
-          console.log("Saving question:", question);
+          print
           await fetch('/api/questions/create', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -69,6 +68,7 @@ export default function QuizPlay() {
               question: question.question,
               options: question.options,
               correctOption: question.answer,
+              userAnswer: question.userAnswer,
               isCorrect: question.isCorrect,
               attemptId: data[1]
             })
@@ -100,7 +100,6 @@ export default function QuizPlay() {
         })
       });
       const questions = await response.json();
-      console.log("Fetched questions for attempt:", questions);
       setQuestionsToShow(questions);
     } catch (error) {
       console.error("Error fetching questions:", error);
@@ -219,14 +218,11 @@ export default function QuizPlay() {
       )}
 
 
-      {/* Questions Modal Overlay */}
       {questionsOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 md:p-6">
           
-          {/* Modal Container */}
-          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-2xl w-3xl h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
             
-            {/* Modal Header (Sticky) */}
             <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white z-10 shrink-0">
               <div>
                 <h3 className="text-xl font-bold text-gray-900">Attempt Details</h3>
@@ -257,19 +253,19 @@ export default function QuizPlay() {
                         </h4>
                         
                         <div className="space-y-2">
-                          <div className={question.correctOption === question.options[0] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                          <div className={question.correctOption === question.options[0] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : question.correctOption != question.options[0] && question.userAnswer === question.options[0] ? `w-full p-3 rounded-xl border-2  border-red-500 bg-red-50 text-red-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
                             {question.options[0]}
                           </div>
                           
-                          <div className={question.correctOption === question.options[1] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                          <div className={question.correctOption === question.options[1] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : question.correctOption != question.options[1] && question.userAnswer === question.options[1] ? `w-full p-3 rounded-xl border-2  border-red-500 bg-red-50 text-red-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
                             {question.options[1]}
                           </div>
 
-                          <div className={question.correctOption === question.options[2] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                          <div className={question.correctOption === question.options[2]? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : question.correctOption != question.options[2] && question.userAnswer === question.options[2] ? `w-full p-3 rounded-xl border-2  border-red-500 bg-red-50 text-red-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
                             {question.options[2]}
                           </div>
 
-                          <div className={question.correctOption === question.options[3] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                          <div className={question.correctOption === question.options[3] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : question.correctOption != question.options[3] && question.userAnswer === question.options[3] ? `w-full p-3 rounded-xl border-2  border-red-500 bg-red-50 text-red-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
                             {question.options[3]}
                           </div>
                         </div>

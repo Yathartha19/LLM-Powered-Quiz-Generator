@@ -21,7 +21,7 @@ let QuestionsController = class QuestionsController {
         this.questionsService = questionsService;
     }
     create(body) {
-        return this.questionsService.create(body.question, body.options, body.correctOption, body.isCorrect, body.attemptId);
+        return this.questionsService.create(body.question, body.options, body.correctOption, body.userAnswer, body.isCorrect, body.attemptId);
     }
     findForAttempt(body) {
         return this.questionsService.findForAttempt(body.attemptId);

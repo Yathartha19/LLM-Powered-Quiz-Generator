@@ -15,11 +15,11 @@ export class QuestionsService {
         private questionsRepository: Repository<Question>,
       ) {}
     
-    async create(questions: string, options: string[], correctOption: string, isCorrect: boolean, attemptId: string) {
+    async create(questions: string, options: string[], correctOption: string, userAnswer: string, isCorrect: boolean, attemptId: string) {
       const attempt = await this.attemptsRepository.findOne({ where: { id: attemptId } });
       if (!attempt) throw new Error('Attempt not found');
   
-      const newQuestion = this.questionsRepository.create({ question: questions, options, correctOption, isCorrect, attempt });
+      const newQuestion = this.questionsRepository.create({ question: questions, options, correctOption, userAnswer, isCorrect, attempt });
       await this.questionsRepository.save(newQuestion);
     }
 

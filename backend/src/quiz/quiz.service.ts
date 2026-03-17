@@ -96,7 +96,7 @@ export class QuizService {
     if (questions.length === 0) {
       userPrompt = `Generate the first question based on: ${quizData.description}.`;
     } else {
-      userPrompt = `Based on these past questions: ${JSON.stringify(questions)}, generate a new follow-up question.`;
+      userPrompt = `Based on these past questions: ${JSON.stringify(questions)}, generate a new follow-up question. Adapt this new question's difficulty based on the previous questions and useranswers.`;
     }
 
     try {
@@ -107,7 +107,7 @@ export class QuizService {
           {
             role: 'system',
             content: `You are a quiz assistant. Return ONLY a JSON object with the key "new_question". 
-            Format: {"new_question": {"id": "int incrementing from 0 ", "question": "text", "options": ["a", "b", "c", "d"], "answer": "text", "isCorrect": false}}`,
+            Format: {"new_question": {"id": "int incrementing from 0 ", "question": "text", "options": ["a", "b", "c", "d"], "answer": "text", "userAnswer": "ALWAYS LEAVE THIS EMPTY", "isCorrect": false}}`,
           },
           { role: 'user', content: userPrompt },
         ],
