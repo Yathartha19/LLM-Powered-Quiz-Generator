@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { QuizModule } from './quiz/quiz.module';
 import { AuthModule } from './auth/auth.module';
 import { AttemptsModule } from './attempts/attempts.module';
+import { QuestionsModule } from './questions/questions.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { AttemptsModule } from './attempts/attempts.module';
 
     QuizModule,
     AuthModule,
-    AttemptsModule
+    AttemptsModule,
+    QuestionsModule
 
   ],
   controllers: [],

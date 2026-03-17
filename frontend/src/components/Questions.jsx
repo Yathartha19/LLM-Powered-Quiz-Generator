@@ -20,6 +20,7 @@ const Questions = ( { quiz, onFinish } ) => {
 
     if ( questions.length > 0 && selectedOption === questions[questions.length - 1].answer ) {
       currentScore += 1
+      questions[questions.length - 1].isCorrect = true;
       setScore(currentScore)
       setWasCorrect('true');
     } else {
@@ -27,7 +28,7 @@ const Questions = ( { quiz, onFinish } ) => {
     }
 
     if (questions.length === 5) {
-        onFinish(currentScore);
+        onFinish(currentScore, questions);
         return;
     }
 

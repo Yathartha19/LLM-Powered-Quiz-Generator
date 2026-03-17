@@ -23,17 +23,20 @@ const quiz_entity_1 = require("./entities/quiz.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
 const config_1 = require("@nestjs/config");
 const attempt_entity_1 = require("../attempts/entities/attempt.entity");
+const questions_entity_1 = require("../questions/entities/questions.entity");
 const groq_sdk_1 = __importDefault(require("groq-sdk"));
 let QuizService = class QuizService {
     quizRepository;
     userRepository;
     attemptsRepository;
+    questionsRepository;
     configService;
     groq;
-    constructor(quizRepository, userRepository, attemptsRepository, configService) {
+    constructor(quizRepository, userRepository, attemptsRepository, questionsRepository, configService) {
         this.quizRepository = quizRepository;
         this.userRepository = userRepository;
         this.attemptsRepository = attemptsRepository;
+        this.questionsRepository = questionsRepository;
         this.configService = configService;
         this.groq = new groq_sdk_1.default({
             apiKey: this.configService.get('GROQ_API_KEY'),
@@ -56,6 +59,10 @@ let QuizService = class QuizService {
         if (!quiz)
             throw new Error('Quiz not found');
         const attempts = await this.attemptsRepository.find({ where: { quiz: { id } } });
+        for (const attempt of attempts) {
+            const questions = await this.questionsRepository.find({ where: { attempt: { id: attempt.id } } });
+            await this.questionsRepository.remove(questions);
+        }
         await this.attemptsRepository.remove(attempts);
         await this.quizRepository.remove(quiz);
         const data = await this.userRepository.findOne({
@@ -120,7 +127,9 @@ exports.QuizService = QuizService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(quiz_entity_1.Quiz)),
     __param(1, (0, typeorm_1.InjectRepository)(user_entity_1.User)),
     __param(2, (0, typeorm_1.InjectRepository)(attempt_entity_1.Attempt)),
+    __param(3, (0, typeorm_1.InjectRepository)(questions_entity_1.Question)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository,
         config_1.ConfigService])

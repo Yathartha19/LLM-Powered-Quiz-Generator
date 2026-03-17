@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { ChevronLeft, Loader2 } from 'lucide-react';
+import { ChevronLeft, Loader2, EllipsisVertical, X } from 'lucide-react';
 import Questions from './Questions';
 
 export default function QuizPlay() {
@@ -12,6 +12,8 @@ export default function QuizPlay() {
   const [quizDone, setQuizDone] = useState(false);
   const [score, setScore] = useState(0);
   const [loggedin, setLoggedIn] = useState(false);
+  const [questionsOpen, setQuestionsOpen] = useState(false);
+  const [questionsToShow, setQuestionsToShow] = useState([]);
 
   useEffect(() => {
     const user = localStorage.getItem('user');
@@ -41,7 +43,7 @@ export default function QuizPlay() {
     fetchQuizData();
   }, [id]);
 
-  const handleQuizFinish = async (score) => {
+  const handleQuizFinish = async (score, questions) => {
 
     const saveScore = async () => {
       try {
@@ -56,7 +58,24 @@ export default function QuizPlay() {
         });
 
         const data = await response.json();
-        setQuiz(data);
+        console.log("Attempt saved with ID:", data);
+
+        for (const question of questions) {
+          console.log("Saving question:", question);
+          await fetch('/api/questions/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              question: question.question,
+              options: question.options,
+              correctOption: question.answer,
+              isCorrect: question.isCorrect,
+              attemptId: data[1]
+            })
+          });
+        }
+
+        setQuiz(data[0]);
       } catch (error) {
         console.error("Error saving score:", error);
       }
@@ -70,6 +89,24 @@ export default function QuizPlay() {
     setInQuiz(false); 
     setQuizDone(true);
   };
+
+  const handleQuestionShow = async (attemptId) => {
+    try {
+      const response = await fetch('/api/questions/get', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attemptId: attemptId
+        })
+      });
+      const questions = await response.json();
+      console.log("Fetched questions for attempt:", questions);
+      setQuestionsToShow(questions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+    setQuestionsOpen(true);
+  }
 
   if (loading) {
     return (
@@ -149,24 +186,23 @@ export default function QuizPlay() {
                 {quiz.attempts
                     .sort((a, b) => b.score - a.score)
                     .map((attempt, index) => (
-                    <div key={attempt.id} className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
+                      <div key={attempt.id} className="flex items-center justify-between p-4 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center gap-4">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                            index === 0 ? 'bg-yellow-100 text-yellow-600' : 
-                            index === 1 ? 'bg-gray-100 text-gray-600' : 
-                            index === 2 ? 'bg-orange-50 text-orange-600' : 'text-gray-400'
-                            }`}>
+                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${index === 0 ? 'bg-yellow-100 text-yellow-600' : index === 1 ? 'bg-gray-100 text-gray-600' : index === 2 ? 'bg-orange-50 text-orange-600' : 'text-gray-400'}`}>
                             {index + 1}
                         </div>
                         <div>
                             <p className="font-semibold text-gray-900">{attempt.user?.name || 'Anonymous'}</p>
                             <p className="text-xs text-gray-400">{new Date(attempt.startedAt).toLocaleDateString()}</p>
                         </div>
-                        </div>
-                        <div className="text-right">
+                      </div>
+                      <div className="text-right flex flex-row items-center justify-end">
                         <span className="text-lg font-black text-gray-900">{attempt.score}</span>
                         <span className="text-xs text-gray-400 ml-1">/5 pts</span>
-                        </div>
+                        <button onClick={() => handleQuestionShow(attempt.id)} className="w-6 h-6 cursor-pointer ml-2">
+                          <EllipsisVertical />
+                        </button>
+                      </div>
                     </div>
                 ))}
                 </div>
@@ -180,6 +216,83 @@ export default function QuizPlay() {
         </>
       ) : (
         <Questions quiz={quiz} onFinish={handleQuizFinish}/>
+      )}
+
+
+      {/* Questions Modal Overlay */}
+      {questionsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 md:p-6">
+          
+          {/* Modal Container */}
+          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+            
+            {/* Modal Header (Sticky) */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white z-10 shrink-0">
+              <div>
+                <h3 className="text-xl font-bold text-gray-900">Attempt Details</h3>
+                <p className="text-sm text-gray-500 mt-1">Review the questions from this run.</p>
+              </div>
+              <button 
+                onClick={() => setQuestionsOpen(false)}
+                className="p-2 text-gray-400 hover:text-gray-800 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
+              >
+                <X size={24} />
+              </button>
+            </div>
+
+            <div className="p-6 overflow-y-auto bg-gray-50 flex-1">
+              <div className="space-y-6">
+                
+                {questionsToShow.map((question, index) => (
+                  <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <div className="flex flex-col sm:flex-row items-start gap-4">
+                      
+                      <div className="w-8 h-8 shrink-0 rounded-full bg-yellow-100 text-yellow-700 font-bold flex items-center justify-center">
+                        {index + 1}
+                      </div>
+                      
+                      <div className="flex-1 w-full">
+                        <h4 className="font-semibold text-gray-900 mb-4 leading-relaxed">
+                          {question.question}
+                        </h4>
+                        
+                        <div className="space-y-2">
+                          <div className={question.correctOption === question.options[0] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                            {question.options[0]}
+                          </div>
+                          
+                          <div className={question.correctOption === question.options[1] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                            {question.options[1]}
+                          </div>
+
+                          <div className={question.correctOption === question.options[2] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                            {question.options[2]}
+                          </div>
+
+                          <div className={question.correctOption === question.options[3] ? `w-full p-3 rounded-xl border-2  border-green-500 bg-green-50 text-green-700 font-medium text-sm` : `w-full p-3 rounded-xl border-2 border-gray-100 text-gray-500 text-sm`}>
+                            {question.options[3]}
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+              </div>
+            </div>
+            
+            <div className="p-6 border-t border-gray-100 bg-white shrink-0">
+              <button 
+                onClick={() => setQuestionsOpen(false)}
+                className="w-full py-4 bg-yellow-600 text-white rounded-2xl font-bold hover:bg-yellow-700 transition-colors cursor-pointer"
+              >
+                Close Details
+              </button>
+            </div>
+
+          </div>
+        </div>
       )}
     </div>
   );

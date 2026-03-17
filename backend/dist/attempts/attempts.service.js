@@ -41,7 +41,7 @@ let AttemptsService = class AttemptsService {
             where: { id: quizId },
             relations: ['attempts', 'attempts.user']
         });
-        return data;
+        return [data, newAttempt.id];
     }
 };
 exports.AttemptsService = AttemptsService;

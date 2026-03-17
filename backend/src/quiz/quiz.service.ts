@@ -5,6 +5,7 @@ import { Quiz } from './entities/quiz.entity';
 import { User } from '../auth/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Attempt } from '../attempts/entities/attempt.entity';
+import { Question } from '../questions/entities/questions.entity';
 import Groq from 'groq-sdk';
 
 @Injectable()
@@ -20,6 +21,9 @@ export class QuizService {
 
     @InjectRepository(Attempt)
     private attemptsRepository: Repository<Attempt>,
+
+    @InjectRepository(Question)
+    private questionsRepository: Repository<Question>,
 
     private configService: ConfigService,
   ) {
@@ -48,6 +52,10 @@ export class QuizService {
     if (!quiz) throw new Error('Quiz not found');
 
     const attempts = await this.attemptsRepository.find({ where: { quiz: { id } } });
+    for (const attempt of attempts) {
+      const questions = await this.questionsRepository.find({ where: { attempt: { id: attempt.id } } });
+      await this.questionsRepository.remove(questions);
+    }
     await this.attemptsRepository.remove(attempts);
 
     await this.quizRepository.remove(quiz);

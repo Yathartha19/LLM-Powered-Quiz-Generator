@@ -15,6 +15,7 @@ const typeorm_1 = require("@nestjs/typeorm");
 const quiz_module_1 = require("./quiz/quiz.module");
 const auth_module_1 = require("./auth/auth.module");
 const attempts_module_1 = require("./attempts/attempts.module");
+const questions_module_1 = require("./questions/questions.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -46,7 +47,8 @@ exports.AppModule = AppModule = __decorate([
             }),
             quiz_module_1.QuizModule,
             auth_module_1.AuthModule,
-            attempts_module_1.AttemptsModule
+            attempts_module_1.AttemptsModule,
+            questions_module_1.QuestionsModule
         ],
         controllers: [],
         providers: [],

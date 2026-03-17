@@ -14,12 +14,13 @@ const attempts_service_1 = require("./attempts.service");
 const attempts_controller_1 = require("./attempts.controller");
 const quiz_entity_1 = require("../quiz/entities/quiz.entity");
 const user_entity_1 = require("../auth/entities/user.entity");
+const questions_entity_1 = require("../questions/entities/questions.entity");
 let AttemptsModule = class AttemptsModule {
 };
 exports.AttemptsModule = AttemptsModule;
 exports.AttemptsModule = AttemptsModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([attempt_entity_1.Attempt, quiz_entity_1.Quiz, user_entity_1.User])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([attempt_entity_1.Attempt, quiz_entity_1.Quiz, user_entity_1.User, questions_entity_1.Question])],
         controllers: [attempts_controller_1.AttemptsController],
         providers: [attempts_service_1.AttemptsService],
     })

@@ -3,13 +3,15 @@ import { Quiz } from './entities/quiz.entity';
 import { User } from '../auth/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 import { Attempt } from '../attempts/entities/attempt.entity';
+import { Question } from '../questions/entities/questions.entity';
 export declare class QuizService {
     private quizRepository;
     private userRepository;
     private attemptsRepository;
+    private questionsRepository;
     private configService;
     private groq;
-    constructor(quizRepository: Repository<Quiz>, userRepository: Repository<User>, attemptsRepository: Repository<Attempt>, configService: ConfigService);
+    constructor(quizRepository: Repository<Quiz>, userRepository: Repository<User>, attemptsRepository: Repository<Attempt>, questionsRepository: Repository<Question>, configService: ConfigService);
     create(name: string, description: string, creatorId: string): Promise<Quiz[] | undefined>;
     delete(id: string, creatorId: string): Promise<Quiz[] | undefined>;
     update(id: string, name: string, description: string, creatorId: string): Promise<Quiz[] | undefined>;

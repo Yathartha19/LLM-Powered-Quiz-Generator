@@ -13,11 +13,13 @@ exports.Attempt = void 0;
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("../../auth/entities/user.entity");
 const quiz_entity_1 = require("../../quiz/entities/quiz.entity");
+const questions_entity_1 = require("../../questions/entities/questions.entity");
 let Attempt = class Attempt {
     id;
     user;
     quiz;
     score;
+    questions;
     startedAt;
 };
 exports.Attempt = Attempt;
@@ -37,6 +39,10 @@ __decorate([
     (0, typeorm_1.Column)({ default: 0 }),
     __metadata("design:type", Number)
 ], Attempt.prototype, "score", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => questions_entity_1.Question, question => question.attempt),
+    __metadata("design:type", questions_entity_1.Question)
+], Attempt.prototype, "questions", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

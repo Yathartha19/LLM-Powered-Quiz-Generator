@@ -7,9 +7,10 @@ import { Quiz } from './entities/quiz.entity';
 import { User } from 'src/auth/entities/user.entity';
 import { Attempt } from 'src/attempts/entities/attempt.entity';
 import { ConfigModule } from '@nestjs/config/dist/config.module';
+import { Question } from 'src/questions/entities/questions.entity';
 
 @Module({
-  imports: [ TypeOrmModule.forFeature([Quiz, User, Attempt]), ConfigModule,],
+  imports: [ TypeOrmModule.forFeature([Quiz, User, Attempt, Question]), ConfigModule,],
   controllers: [QuizController],
   providers: [QuizService],
 })

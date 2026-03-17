@@ -7,5 +7,5 @@ export declare class AttemptsService {
     private attemptsRepository;
     private userRepository;
     constructor(quizRepository: Repository<Quiz>, attemptsRepository: Repository<Attempt>, userRepository: Repository<User>);
-    create(userId: string, quizId: string, score: number): Promise<Quiz | null>;
+    create(userId: string, quizId: string, score: number): Promise<(string | Quiz | null)[]>;
 }

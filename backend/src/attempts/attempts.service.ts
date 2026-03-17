@@ -34,7 +34,7 @@ export class AttemptsService {
       relations: ['attempts', 'attempts.user'] 
     });
 
-    return data;
+    return [data, newAttempt.id];
   }
 
 }

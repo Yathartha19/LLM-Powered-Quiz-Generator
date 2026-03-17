@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, OneToMany } from 'typeorm';
 import { User } from '../../auth/entities/user.entity';
 import { Quiz } from '../../quiz/entities/quiz.entity';
+import { Question } from '../../questions/entities/questions.entity';
 
 @Entity('attempts')
 export class Attempt {
@@ -15,6 +16,9 @@ export class Attempt {
 
   @Column({ default: 0 })
   score: number;
+
+  @OneToMany(() => Question, question => question.attempt)
+  questions: Question;
 
   @CreateDateColumn()
   startedAt: Date;
